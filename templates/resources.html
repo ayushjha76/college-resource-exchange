@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            College Resource Exchange
+        </div>
+
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/upload">Upload</a>
+            <a href="/resources">Resources</a>
+            <a href="/logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <h1 class="page-title">
+        Available Resources
+    </h1>
+
+    <div class="resource-container">
+
+        {% for resource in resources %}
+
+        <div class="resource-card">
+
+            <h3>{{ resource[1] }}</h3>
+
+            <p>
+                <strong>Subject:</strong>
+                {{ resource[2] }}
+            </p>
+
+            <p>
+                <strong>Type:</strong>
+                {{ resource[3] }}
+            </p>
+
+            <p>
+                <strong>Semester:</strong>
+                {{ resource[4] }}
+            </p>
+
+            <p>
+                <strong>Uploaded By:</strong>
+                {{ resource[6] }}
+            </p>
+
+            <a href="/download/{{ resource[5] }}">
+                Download
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</body>
+</html>

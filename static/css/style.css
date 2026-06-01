@@ -1,0 +1,321 @@
+/* =========================
+   Global Styles
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+/* =========================
+   Navbar
+========================= */
+
+.navbar{
+    background:#2c3e50;
+    color:white;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:15px 40px;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.nav-links a:hover{
+    color:#1abc9c;
+}
+
+/* =========================
+   Home Page Hero
+========================= */
+
+.hero{
+    text-align:center;
+    margin-top:120px;
+}
+
+.hero h1{
+    font-size:55px;
+    color:#2c3e50;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:20px;
+    color:#555;
+    margin-bottom:30px;
+}
+
+/* =========================
+   Dashboard
+========================= */
+
+.dashboard-container{
+    text-align:center;
+    margin-top:80px;
+}
+
+.dashboard-container h1{
+    font-size:45px;
+    color:#2c3e50;
+    margin-bottom:15px;
+}
+
+.dashboard-container p{
+    font-size:18px;
+    color:#555;
+}
+
+/* =========================
+   Buttons
+========================= */
+
+.dashboard-buttons{
+    margin-top:40px;
+}
+
+.btn{
+    display:inline-block;
+
+    padding:14px 28px;
+
+    margin:10px;
+
+    background:#2c3e50;
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:8px;
+
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#1abc9c;
+    transform:translateY(-3px);
+}
+
+.logout-btn{
+    background:#e74c3c;
+}
+
+.logout-btn:hover{
+    background:#c0392b;
+}
+
+/* =========================
+   Forms
+========================= */
+
+.form-container{
+    width:500px;
+
+    margin:50px auto;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    box-shadow:0px 4px 12px rgba(0,0,0,0.1);
+}
+
+.form-container h2{
+    text-align:center;
+    margin-bottom:25px;
+    color:#2c3e50;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+
+    padding:12px;
+
+    margin-bottom:15px;
+
+    border:1px solid #ccc;
+
+    border-radius:6px;
+
+    font-size:15px;
+}
+
+textarea{
+    height:100px;
+    resize:none;
+}
+
+button{
+    width:100%;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:6px;
+
+    background:#2c3e50;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+button:hover{
+    background:#1abc9c;
+}
+
+/* =========================
+   Resource Page
+========================= */
+
+.page-title{
+    text-align:center;
+    margin-top:30px;
+    color:#2c3e50;
+}
+
+.resource-container{
+    width:80%;
+    margin:30px auto;
+}
+
+.resource-card{
+    background:white;
+
+    padding:25px;
+
+    margin-bottom:20px;
+
+    border-radius:12px;
+
+    box-shadow:0px 4px 10px rgba(0,0,0,0.1);
+}
+
+.resource-card h3{
+    color:#2c3e50;
+    margin-bottom:10px;
+}
+
+.resource-card p{
+    margin-bottom:8px;
+    color:#555;
+}
+
+.resource-card a{
+    display:inline-block;
+
+    margin-top:10px;
+
+    padding:10px 20px;
+
+    background:#1abc9c;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:6px;
+
+    transition:0.3s;
+}
+
+.resource-card a:hover{
+    background:#16a085;
+}
+
+/* =========================
+   Stats Card
+========================= */
+
+.stats-card{
+    width:300px;
+
+    margin:30px auto;
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    box-shadow:0px 4px 10px rgba(0,0,0,0.1);
+}
+
+.stats-card h2{
+    color:#2c3e50;
+}
+
+.stats-card p{
+    font-size:30px;
+    font-weight:bold;
+    color:#1abc9c;
+    margin-top:10px;
+}
+
+/* =========================
+   Responsive Design
+========================= */
+
+@media(max-width:768px){
+
+    .navbar{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .nav-links{
+        text-align:center;
+    }
+
+    .nav-links a{
+        display:block;
+        margin:10px 0;
+    }
+
+    .form-container{
+        width:90%;
+    }
+
+    .resource-container{
+        width:95%;
+    }
+
+    .hero h1{
+        font-size:38px;
+    }
+
+    .dashboard-container h1{
+        font-size:35px;
+    }
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Resource</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            College Resource Exchange
+        </div>
+
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/upload">Upload</a>
+            <a href="/resources">Resources</a>
+            <a href="/logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <div class="form-container">
+
+        <h2>Upload Resource</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+
+            <input type="text"
+                   name="title"
+                   placeholder="Resource Title"
+                   required>
+
+            <select name="subject" required>
+                <option value="">Select Subject</option>
+                <option>DBMS</option>
+                <option>DAA</option>
+                <option>COA</option>
+                <option>Operating System</option>
+                <option>Java</option>
+                <option>Python</option>
+                <option>Computer Networks</option>
+            </select>
+
+            <select name="resource_type" required>
+                <option value="">Resource Type</option>
+                <option>Notes</option>
+                <option>PYQ</option>
+                <option>Assignment</option>
+                <option>Lab Manual</option>
+                <option>Book</option>
+            </select>
+
+            <select name="semester" required>
+                <option value="">Semester</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+            </select>
+
+            <textarea
+                name="description"
+                placeholder="Description">
+            </textarea>
+
+            <input type="file"
+                   name="file"
+                   required>
+
+            <button type="submit">
+                Upload Resource
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

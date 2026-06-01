@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Resource Exchange</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            College Resource Exchange
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/resources">Resources</a>
+            <a href="/upload">Upload</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </div>
+
+    </nav>
+
+    <section class="hero">
+
+        <h1>Share Notes, Learn Together</h1>
+
+        <p>
+            Upload Notes, PYQs, Assignments and help your classmates.
+        </p>
+
+        <a href="/resources" class="btn">
+            Browse Resources
+        </a>
+
+        <a href="/upload" class="btn">
+            Upload Resource
+        </a>
+
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            College Resource Exchange
+        </div>
+
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/upload">Upload</a>
+            <a href="/resources">Resources</a>
+            <a href="/logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <div class="dashboard-container">
+
+        <h1>Welcome {{ username }} 👋</h1>
+
+        <p>Manage and share study resources.</p>
+
+        <div class="dashboard-buttons">
+
+            <a href="/upload" class="btn">
+                Upload Resource
+            </a>
+
+            <a href="/resources" class="btn">
+                View Resources
+            </a>
+
+        </div>
+
+        <div class="stats-card">
+            <h2>Total Resources</h2>
+            <p>{{ total_resources }}</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
