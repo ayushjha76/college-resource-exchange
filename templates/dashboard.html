@@ -29,7 +29,9 @@
 
         <h1>Welcome {{ username }} 👋</h1>
 
-        <p>Manage and share study resources.</p>
+        <p>
+            Manage and share study resources with your classmates.
+        </p>
 
         <div class="dashboard-buttons">
 
@@ -43,9 +45,18 @@
 
         </div>
 
-        <div class="stats-card">
-            <h2>Total Resources</h2>
-            <p>{{ total_resources }}</p>
+        <div class="stats-wrapper">
+
+            <div class="stats-card">
+                <h2>Total Resources</h2>
+                <p>{{ total_resources }}</p>
+            </div>
+
+            <div class="stats-card">
+                <h2>My Uploads</h2>
+                <p>{{ my_uploads }}</p>
+            </div>
+
         </div>
 
     </div>

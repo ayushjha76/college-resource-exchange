@@ -33,10 +33,14 @@ body{
     font-weight:bold;
 }
 
+.nav-links{
+    display:flex;
+    gap:20px;
+}
+
 .nav-links a{
     color:white;
     text-decoration:none;
-    margin-left:20px;
     font-weight:bold;
     transition:0.3s;
 }
@@ -46,7 +50,7 @@ body{
 }
 
 /* =========================
-   Home Page Hero
+   Hero Section
 ========================= */
 
 .hero{
@@ -72,7 +76,7 @@ body{
 
 .dashboard-container{
     text-align:center;
-    margin-top:80px;
+    margin-top:60px;
 }
 
 .dashboard-container h1{
@@ -91,7 +95,7 @@ body{
 ========================= */
 
 .dashboard-buttons{
-    margin-top:40px;
+    margin-top:30px;
 }
 
 .btn{
@@ -102,6 +106,7 @@ body{
     margin:10px;
 
     background:#2c3e50;
+
     color:white;
 
     text-decoration:none;
@@ -116,12 +121,41 @@ body{
     transform:translateY(-3px);
 }
 
-.logout-btn{
-    background:#e74c3c;
+/* =========================
+   Stats Cards
+========================= */
+
+.stats-wrapper{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    margin-top:40px;
+    flex-wrap:wrap;
 }
 
-.logout-btn:hover{
-    background:#c0392b;
+.stats-card{
+    width:250px;
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:12px;
+
+    box-shadow:0px 4px 10px rgba(0,0,0,0.1);
+
+    text-align:center;
+}
+
+.stats-card h2{
+    color:#2c3e50;
+    margin-bottom:15px;
+}
+
+.stats-card p{
+    font-size:35px;
+    font-weight:bold;
+    color:#1abc9c;
 }
 
 /* =========================
@@ -129,9 +163,10 @@ body{
 ========================= */
 
 .form-container{
+
     width:500px;
 
-    margin:50px auto;
+    margin:40px auto;
 
     background:white;
 
@@ -143,14 +178,18 @@ body{
 }
 
 .form-container h2{
+
     text-align:center;
+
     margin-bottom:25px;
+
     color:#2c3e50;
 }
 
 input,
 select,
 textarea{
+
     width:100%;
 
     padding:12px;
@@ -165,11 +204,12 @@ textarea{
 }
 
 textarea{
-    height:100px;
+    height:120px;
     resize:none;
 }
 
 button{
+
     width:100%;
 
     padding:12px;
@@ -194,7 +234,26 @@ button:hover{
 }
 
 /* =========================
-   Resource Page
+   Search Box
+========================= */
+
+.search-box{
+    width:80%;
+    margin:20px auto;
+}
+
+.search-box form{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.search-box input{
+    width:400px;
+}
+
+/* =========================
+   Resources Page
 ========================= */
 
 .page-title{
@@ -209,6 +268,7 @@ button:hover{
 }
 
 .resource-card{
+
     background:white;
 
     padding:25px;
@@ -231,6 +291,7 @@ button:hover{
 }
 
 .resource-card a{
+
     display:inline-block;
 
     margin-top:10px;
@@ -253,38 +314,7 @@ button:hover{
 }
 
 /* =========================
-   Stats Card
-========================= */
-
-.stats-card{
-    width:300px;
-
-    margin:30px auto;
-
-    background:white;
-
-    padding:25px;
-
-    border-radius:12px;
-
-    text-align:center;
-
-    box-shadow:0px 4px 10px rgba(0,0,0,0.1);
-}
-
-.stats-card h2{
-    color:#2c3e50;
-}
-
-.stats-card p{
-    font-size:30px;
-    font-weight:bold;
-    color:#1abc9c;
-    margin-top:10px;
-}
-
-/* =========================
-   Responsive Design
+   Responsive
 ========================= */
 
 @media(max-width:768px){
@@ -295,12 +325,16 @@ button:hover{
     }
 
     .nav-links{
-        text-align:center;
+        flex-direction:column;
+        align-items:center;
     }
 
-    .nav-links a{
-        display:block;
-        margin:10px 0;
+    .hero h1{
+        font-size:40px;
+    }
+
+    .dashboard-container h1{
+        font-size:35px;
     }
 
     .form-container{
@@ -311,11 +345,11 @@ button:hover{
         width:95%;
     }
 
-    .hero h1{
-        font-size:38px;
+    .search-box form{
+        flex-direction:column;
     }
 
-    .dashboard-container h1{
-        font-size:35px;
+    .search-box input{
+        width:100%;
     }
 }

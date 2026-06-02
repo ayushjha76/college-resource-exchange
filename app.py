@@ -12,6 +12,7 @@ import os
 
 app = Flask(__name__)
 
+# Secret Key
 app.secret_key = "college_resource_secret"
 
 # Upload Folder
@@ -30,6 +31,7 @@ mysql = MySQL(app)
 # =========================
 # Home Page
 # =========================
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -38,6 +40,7 @@ def home():
 # =========================
 # Register
 # =========================
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 
@@ -71,6 +74,7 @@ def register():
 # =========================
 # Login
 # =========================
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
@@ -108,21 +112,43 @@ def login():
 # =========================
 # Dashboard
 # =========================
+
 @app.route('/dashboard')
 def dashboard():
 
     if 'user_id' not in session:
         return redirect('/login')
 
+    cur = mysql.connection.cursor()
+
+    cur.execute("SELECT COUNT(*) FROM resources")
+    total_resources = cur.fetchone()[0]
+
+    cur.execute(
+        """
+        SELECT COUNT(*)
+        FROM resources
+        WHERE uploaded_by=%s
+        """,
+        (session['user_id'],)
+    )
+
+    my_uploads = cur.fetchone()[0]
+
+    cur.close()
+
     return render_template(
         'dashboard.html',
-        username=session['user_name']
+        username=session['user_name'],
+        total_resources=total_resources,
+        my_uploads=my_uploads
     )
 
 
 # =========================
 # Logout
 # =========================
+
 @app.route('/logout')
 def logout():
 
@@ -134,6 +160,7 @@ def logout():
 # =========================
 # Upload Resource
 # =========================
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
 
@@ -195,15 +222,19 @@ def upload():
 
 
 # =========================
-# View Resources
+# Resources + Search
 # =========================
+
 @app.route('/resources')
 def resources():
 
+    search = request.args.get('search')
+
     cur = mysql.connection.cursor()
 
-    cur.execute(
-        """
+    if search:
+
+        query = """
         SELECT
             resources.id,
             resources.title,
@@ -215,9 +246,38 @@ def resources():
         FROM resources
         JOIN users
         ON resources.uploaded_by = users.id
+        WHERE
+            resources.title LIKE %s
+            OR resources.subject LIKE %s
+            OR resources.resource_type LIKE %s
         ORDER BY resources.upload_date DESC
         """
-    )
+
+        value = f"%{search}%"
+
+        cur.execute(
+            query,
+            (value, value, value)
+        )
+
+    else:
+
+        cur.execute(
+            """
+            SELECT
+                resources.id,
+                resources.title,
+                resources.subject,
+                resources.resource_type,
+                resources.semester,
+                resources.file_name,
+                users.name
+            FROM resources
+            JOIN users
+            ON resources.uploaded_by = users.id
+            ORDER BY resources.upload_date DESC
+            """
+        )
 
     all_resources = cur.fetchall()
 
@@ -232,6 +292,7 @@ def resources():
 # =========================
 # Download Resource
 # =========================
+
 @app.route('/download/<filename>')
 def download(filename):
 
@@ -245,5 +306,6 @@ def download(filename):
 # =========================
 # Run App
 # =========================
+
 if __name__ == '__main__':
     app.run(debug=True)
