@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            College Resource Exchange
+        </div>
+
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/upload">Upload</a>
+            <a href="/resources">Resources</a>
+            <a href="/my-resources">My Resources</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <div class="profile-card">
+
+        {% if user[4] %}
+
+            <img
+                src="{{ url_for(
+                'static',
+                filename='profile_pictures/' + user[4]
+                ) }}"
+                class="profile-image">
+
+            {% else %}
+
+            <img
+                src="{{ url_for(
+                'static',
+                filename='profile_pictures/default.png'
+                ) }}"
+                class="profile-image">
+
+            {% endif %}
+
+            <form
+                action="/upload-profile-picture"
+                method="POST"
+                enctype="multipart/form-data">
+
+                <input
+                    type="file"
+                    name="profile_picture"
+                    required>
+
+                <button type="submit">
+                    Upload Photo
+                </button>
+
+            </form>
+
+        <h1>👤 My Profile</h1>
+        <p style="text-align:center;">
+    College Resource Exchange Member
+</p>
+
+        <p>
+            <strong>Name:</strong>
+            {{ user[0] }}
+        </p>
+
+        <p>
+            <strong>Email:</strong>
+            {{ user[1] }}
+        </p>
+
+        <p>
+            <strong>Branch:</strong>
+            {{ user[2] }}
+        </p>
+
+        <p>
+            <strong>Semester:</strong>
+            {{ user[3] }}
+        </p>
+
+        <p>
+            <strong>Total Uploads:</strong>
+            {{ total_uploads }}
+        </p>
+
+        <a href="/change-password" class="btn">
+            Change Password
+        </a>
+
+    </div>
+
+</body>
+</html>

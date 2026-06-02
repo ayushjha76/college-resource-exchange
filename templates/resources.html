@@ -21,6 +21,7 @@
             <a href="/upload">Upload</a>
             <a href="/resources">Resources</a>
             <a href="/logout">Logout</a>
+            <a href="/my-resources">My Resources</a>
         </div>
 
     </nav>
@@ -71,7 +72,10 @@
 
             <p>
                 <strong>Uploaded By:</strong>
-                {{ resource[6] }}
+
+                    <a href="/user/{{ resource[6] }}">
+                        {{ resource[7] }}
+                    </a>
             </p>
 
             <a href="/download/{{ resource[5] }}">
