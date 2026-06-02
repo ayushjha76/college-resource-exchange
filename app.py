@@ -8,6 +8,7 @@ from flask import (
 )
 
 from flask_mysqldb import MySQL
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
@@ -52,6 +53,8 @@ def register():
         branch = request.form['branch']
         semester = request.form['semester']
 
+        hashed_password = generate_password_hash(password)
+
         cur = mysql.connection.cursor()
 
         cur.execute(
@@ -60,7 +63,13 @@ def register():
             (name, email, password, branch, semester)
             VALUES (%s, %s, %s, %s, %s)
             """,
-            (name, email, password, branch, semester)
+            (
+                name,
+                email,
+                hashed_password,
+                branch,
+                semester
+            )
         )
 
         mysql.connection.commit()
@@ -69,8 +78,6 @@ def register():
         return redirect('/login')
 
     return render_template('register.html')
-
-
 # =========================
 # Login
 # =========================
@@ -88,9 +95,9 @@ def login():
         cur.execute(
             """
             SELECT * FROM users
-            WHERE email=%s AND password=%s
+            WHERE email=%s
             """,
-            (email, password)
+            (email,)
         )
 
         user = cur.fetchone()
@@ -99,15 +106,21 @@ def login():
 
         if user:
 
-            session['user_id'] = user[0]
-            session['user_name'] = user[1]
+            stored_password = user[3]
 
-            return redirect('/dashboard')
+            if check_password_hash(
+                stored_password,
+                password
+            ):
+
+                session['user_id'] = user[0]
+                session['user_name'] = user[1]
+
+                return redirect('/dashboard')
 
         return "Invalid Email or Password"
 
     return render_template('login.html')
-
 
 # =========================
 # Dashboard
