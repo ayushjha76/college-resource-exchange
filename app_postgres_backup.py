@@ -1,70 +1,44 @@
-
 import os
-
 from flask import (
     Flask,
-    render_template,
     request,
     session,
     redirect,
     send_from_directory
 )
 
+
+app = Flask(__name__)
+
+
+from models import db, User, Resource
+from werkzeug.utils import secure_filename
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash
 )
 
-from werkzeug.utils import secure_filename
-
-from models import (
-    db,
-    User,
-    Resource
-)
-
-app = Flask(__name__)
-
-# =========================
-# CONFIG
-# =========================
 
 app.secret_key = "college_resource_secret"
-
 UPLOAD_FOLDER = "uploads"
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 os.makedirs(
-    UPLOAD_FOLDER,
+    app.config['UPLOAD_FOLDER'],
     exist_ok=True
 )
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    "postgresql://college_resource_db_user:"
-    "cqahCPYi18s3JwnTEPYQ60bTeH07w7yU"
-    "@dpg-d8hgg13eo5us73869uvg-a.oregon-postgres.render.com/"
-    "college_resource_db"
-)
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://college_resource_db_user:cqahCPYi18s3JwnTEPYQ60bTeH07w7yU@dpg-d8hgg13eo5us73869uvg-a.oregon-postgres.render.com/college_resource_db"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-# =========================
-# HOME
-# =========================
-
 @app.route('/')
 def home():
+    return "PostgreSQL Version Running"
 
-    return render_template(
-        'index.html'
-    )
-
-# =========================
-# USERS (TEST)
-# =========================
 
 @app.route('/users')
 def users():
@@ -74,23 +48,12 @@ def users():
     result = ""
 
     for user in all_users:
-
-        result += (
-            f"{user.id} - "
-            f"{user.name} - "
-            f"{user.email}<br>"
-        )
+        result += f"{user.id} - {user.name} - {user.email}<br>"
 
     return result
 
-# =========================
-# REGISTER
-# =========================
 
-@app.route(
-    '/register',
-    methods=['GET', 'POST']
-)
+@app.route('/register', methods=['GET', 'POST'])
 def register():
 
     if request.method == 'POST':
@@ -106,36 +69,46 @@ def register():
         ).first()
 
         if existing_user:
-
             return "Email already exists"
 
-        new_user = User(
-            name=name,
-            email=email,
-            password=generate_password_hash(
-                password
-            ),
-            branch=branch,
-            semester=semester
-        )
+        
 
-        db.session.add(new_user)
-        db.session.commit()
+    return '''
+    <form method="POST">
+        <input name="name" placeholder="Name"><br>
+        <input name="email" placeholder="Email"><br>
+        <input name="password" placeholder="Password"><br>
+        <input name="branch" placeholder="Branch"><br>
+        <input name="semester" placeholder="Semester"><br>
+        <button type="submit">Register</button>
+    </form>
+    '''
 
-        return redirect('/login')
 
-    return render_template(
-        'register.html'
+@app.route('/test-register')
+def test_register():
+
+    existing = User.query.filter_by(
+        email="test2@example.com"
+    ).first()
+
+    if existing:
+        return "User Already Exists"
+
+    user = User(
+        name="Test User",
+        email="test2@example.com",
+        password=generate_password_hash("123456"),
+        branch="CSE",
+        semester="6"
     )
 
-# =========================
-# LOGIN
-# =========================
+    db.session.add(user)
+    db.session.commit()
 
-@app.route(
-    '/login',
-    methods=['GET', 'POST']
-)
+    return "User Added Successfully"
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
 
     if request.method == 'POST':
@@ -155,61 +128,63 @@ def login():
             session['user_id'] = user.id
             session['user_name'] = user.name
 
-            return redirect(
-                '/dashboard'
-            )
+            return redirect('/dashboard')
 
         return "Invalid Email or Password"
 
-    return render_template(
-        'login.html'
-    )
+    return '''
+    <form method="POST">
 
-# =========================
-# LOGOUT
-# =========================
+        <input
+            name="email"
+            placeholder="Email">
 
+        <br><br>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Password">
+
+        <br><br>
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+    '''
+@app.route('/dashboard')
+def dashboard():
+
+    if 'user_id' not in session:
+        return redirect('/login')
+
+    total_resources = Resource.query.count()
+
+    my_uploads = Resource.query.filter_by(
+        uploaded_by=session['user_id']
+    ).count()
+
+    return f"""
+    Welcome {session['user_name']}
+
+    <br><br>
+
+    Total Resources:
+    {total_resources}
+
+    <br><br>
+
+    My Uploads:
+    {my_uploads}
+    """
 @app.route('/logout')
 def logout():
 
     session.clear()
 
-    return redirect('/')
-
-# =========================
-# DASHBOARD
-# =========================
-
-@app.route('/dashboard')
-def dashboard():
-
-    if 'user_id' not in session:
-
-        return redirect('/login')
-
-    total_resources = (
-        Resource.query.count()
-    )
-
-    my_uploads = (
-        Resource.query
-        .filter_by(
-            uploaded_by=session['user_id']
-        )
-        .count()
-    )
-
-    return render_template(
-        'dashboard.html',
-        username=session['user_name'],
-        total_resources=total_resources,
-        my_uploads=my_uploads
-    )
-
-
-# =========================
-# PROFILE
-# =========================
+    return redirect('/login')
 
 @app.route('/profile')
 def profile():
@@ -225,15 +200,49 @@ def profile():
         uploaded_by=session['user_id']
     ).count()
 
-    return render_template(
-        'profile.html',
-        user=user,
-        total_uploads=total_uploads
-    )
+    image_html = ""
 
-# =========================
-# PUBLIC PROFILE
-# =========================
+    if user.profile_picture:
+
+        image_html = f"""
+        <img
+        src="/static/profile_pictures/{user.profile_picture}"
+        width="150">
+        <br><br>
+        """
+
+    return f"""
+    <h1>My Profile</h1>
+
+    {image_html}
+
+    Name: {user.name}<br>
+    Email: {user.email}<br>
+    Branch: {user.branch}<br>
+    Semester: {user.semester}<br>
+
+    <br>
+
+    Total Uploads:
+    {total_uploads}
+
+    <hr>
+
+    <form
+        method="POST"
+        action="/upload-profile-picture"
+        enctype="multipart/form-data">
+
+        <input
+            type="file"
+            name="profile_picture">
+
+        <button type="submit">
+            Upload Picture
+        </button>
+
+    </form>
+    """
 
 @app.route('/user/<int:user_id>')
 def public_profile(user_id):
@@ -250,15 +259,30 @@ def public_profile(user_id):
         uploaded_by=user_id
     ).count()
 
-    return render_template(
-        'public_profile.html',
-        user=user,
-        total_uploads=total_uploads
-    )
+    image_html = ""
 
-# =========================
-# CHANGE PASSWORD
-# =========================
+    if user.profile_picture:
+
+        image_html = f"""
+        <img
+        src="/static/profile_pictures/{user.profile_picture}"
+        width="150">
+        <br><br>
+        """
+
+    return f"""
+    <h1>Public Profile</h1>
+
+    {image_html}
+
+    Name: {user.name}<br>
+    Branch: {user.branch}<br>
+    Semester: {user.semester}<br>
+
+    Total Uploads:
+    {total_uploads}
+    """
+
 
 @app.route(
     '/change-password',
@@ -294,7 +318,7 @@ def change_password():
             user.password,
             current_password
         ):
-            return "Current password is incorrect"
+            return "Current password incorrect"
 
         user.password = generate_password_hash(
             new_password
@@ -302,15 +326,38 @@ def change_password():
 
         db.session.commit()
 
-        return redirect('/profile')
+        return "Password Updated"
 
-    return render_template(
-        'change_password.html'
-    )
+    return '''
+    <form method="POST">
 
-# =========================
-# PROFILE PICTURE UPLOAD
-# =========================
+        <input
+            type="password"
+            name="current_password"
+            placeholder="Current Password">
+
+        <br><br>
+
+        <input
+            type="password"
+            name="new_password"
+            placeholder="New Password">
+
+        <br><br>
+
+        <input
+            type="password"
+            name="confirm_password"
+            placeholder="Confirm Password">
+
+        <br><br>
+
+        <button type="submit">
+            Change Password
+        </button>
+
+    </form>
+    '''
 
 @app.route(
     '/upload-profile-picture',
@@ -329,29 +376,19 @@ def upload_profile_picture():
     if file.filename == '':
         return redirect('/profile')
 
-    profile_folder = os.path.join(
-        app.root_path,
-        'static',
-        'profile_pictures'
-    )
-
-    os.makedirs(
-        profile_folder,
-        exist_ok=True
-    )
-
-    original_filename = secure_filename(
+    filename = secure_filename(
         file.filename
     )
 
     filename = (
         str(session['user_id'])
         + "_"
-        + original_filename
+        + filename
     )
 
     save_path = os.path.join(
-        profile_folder,
+        'static',
+        'profile_pictures',
         filename
     )
 
@@ -368,14 +405,7 @@ def upload_profile_picture():
     return redirect('/profile')
 
 
-# =========================
-# UPLOAD RESOURCE
-# =========================
-
-@app.route(
-    '/upload',
-    methods=['GET', 'POST']
-)
+@app.route('/upload', methods=['GET', 'POST'])
 def upload():
 
     if 'user_id' not in session:
@@ -391,9 +421,7 @@ def upload():
 
         file = request.files['file']
 
-        filename = secure_filename(
-            file.filename
-        )
+        filename = file.filename
 
         file.save(
             os.path.join(
@@ -415,15 +443,29 @@ def upload():
         db.session.add(resource)
         db.session.commit()
 
-        return redirect('/dashboard')
+        return "Resource Uploaded"
 
-    return render_template(
-        'upload.html'
-    )
+    return '''
+    <form method="POST" enctype="multipart/form-data">
 
-# =========================
-# RESOURCES + SEARCH
-# =========================
+        <input name="title" placeholder="Title"><br><br>
+
+        <input name="subject" placeholder="Subject"><br><br>
+
+        <input name="resource_type" placeholder="Type"><br><br>
+
+        <input name="semester" placeholder="Semester"><br><br>
+
+        <textarea name="description"></textarea><br><br>
+
+        <input type="file" name="file"><br><br>
+
+        <button type="submit">
+            Upload
+        </button>
+
+    </form>
+    '''
 
 @app.route('/resources')
 def resources():
@@ -439,8 +481,6 @@ def resources():
             (Resource.title.ilike(f"%{search}%")) |
             (Resource.subject.ilike(f"%{search}%")) |
             (Resource.resource_type.ilike(f"%{search}%"))
-        ).order_by(
-            Resource.upload_date.desc()
         ).all()
 
     else:
@@ -449,15 +489,42 @@ def resources():
             Resource.upload_date.desc()
         ).all()
 
-    return render_template(
-        'resources.html',
-        resources=all_resources,
-        search=search
-    )
+    result = """
 
-# =========================
-# MY RESOURCES
-# =========================
+    <form method="GET">
+
+        <input
+            name="search"
+            placeholder="Search Resource">
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <hr>
+    """
+
+    for resource in all_resources:
+
+        result += f"""
+        <b>{resource.title}</b><br>
+
+        Subject:
+        {resource.subject}<br>
+
+        Uploaded By:
+        {resource.user.name}<br>
+
+        <a href="/download/{resource.file_name}">
+        Download
+        </a>
+
+        <hr>
+        """
+
+    return result
 
 @app.route('/my-resources')
 def my_resources():
@@ -467,19 +534,23 @@ def my_resources():
 
     resources = Resource.query.filter_by(
         uploaded_by=session['user_id']
-    ).order_by(
-        Resource.upload_date.desc()
     ).all()
 
-    return render_template(
-        'my_resources.html',
-        resources=resources,
-        username=session['user_name']
-    )
+    result = ""
 
-# =========================
-# DOWNLOAD RESOURCE
-# =========================
+    for resource in resources:
+
+        result += f"""
+        {resource.title}
+
+        <a href="/delete/{resource.id}">
+        Delete
+        </a>
+
+        <br><br>
+        """
+
+    return result
 
 @app.route('/download/<filename>')
 def download(filename):
@@ -492,10 +563,6 @@ def download(filename):
         filename,
         as_attachment=True
     )
-
-# =========================
-# DELETE RESOURCE
-# =========================
 
 @app.route('/delete/<int:resource_id>')
 def delete_resource(resource_id):
@@ -527,15 +594,6 @@ def delete_resource(resource_id):
 
     return redirect('/my-resources')
 
-# =========================
-# RUN APP
-# =========================
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-
-
-

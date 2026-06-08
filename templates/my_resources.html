@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,35 +39,50 @@
 
             <div class="resource-card">
 
-                <h3>{{ resource[1] }}</h3>
+                <h3>
+                    {{ resource.title }}
+                </h3>
 
                 <p>
                     <strong>Subject:</strong>
-                    {{ resource[2] }}
+                    {{ resource.subject }}
                 </p>
 
                 <p>
                     <strong>Type:</strong>
-                    {{ resource[3] }}
+                    {{ resource.resource_type }}
                 </p>
 
                 <p>
                     <strong>Semester:</strong>
-                    {{ resource[4] }}
+                    {{ resource.semester }}
                 </p>
 
-                <a href="/download/{{ resource[5] }}">
-                    Download
-                </a>
+                {% if resource.description %}
 
-                <a
-                    href="/delete/{{ resource[0] }}"
-                    class="delete-btn"
-                    onclick="return confirm('Delete this resource?')">
+                <p>
+                    <strong>Description:</strong>
+                    {{ resource.description }}
+                </p>
 
-                    Delete
+                {% endif %}
 
-                </a>
+                <div class="resource-actions">
+
+                    <a href="/download/{{ resource.file_name }}">
+                        Download
+                    </a>
+
+                    <a
+                        href="/delete/{{ resource.id }}"
+                        class="delete-btn"
+                        onclick="return confirm('Delete this resource?')">
+
+                        Delete
+
+                    </a>
+
+                </div>
 
             </div>
 
@@ -76,9 +92,13 @@
 
             <div class="stats-card">
 
-                <h2>No Resources Yet</h2>
+                <h2>
+                    No Resources Yet
+                </h2>
 
-                <p>0</p>
+                <p>
+                    Upload your first resource.
+                </p>
 
             </div>
 
@@ -88,3 +108,4 @@
 
 </body>
 </html>
+```

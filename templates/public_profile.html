@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,12 +28,12 @@
 
 <div class="profile-card">
 
-    {% if user[3] %}
+    {% if user.profile_picture %}
 
     <img
         src="{{ url_for(
         'static',
-        filename='profile_pictures/' + user[3]
+        filename='profile_pictures/' + user.profile_picture
         ) }}"
         class="profile-image">
 
@@ -47,7 +48,7 @@
 
     {% endif %}
 
-    <h1>{{ user[0] }}</h1>
+    <h1>{{ user.name }}</h1>
 
     <p class="profile-subtitle">
         College Resource Exchange Member
@@ -57,12 +58,12 @@
 
         <p>
             <strong>Branch:</strong>
-            {{ user[1] }}
+            {{ user.branch }}
         </p>
 
         <p>
             <strong>Semester:</strong>
-            {{ user[2] }}
+            {{ user.semester }}
         </p>
 
         <p>
@@ -76,3 +77,4 @@
 
 </body>
 </html>
+```

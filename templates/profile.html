@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,16 +30,16 @@
 
     <div class="profile-card">
 
-        {% if user[4] %}
+        {% if user.profile_picture %}
 
             <img
                 src="{{ url_for(
                 'static',
-                filename='profile_pictures/' + user[4]
+                filename='profile_pictures/' + user.profile_picture
                 ) }}"
                 class="profile-image">
 
-            {% else %}
+        {% else %}
 
             <img
                 src="{{ url_for(
@@ -47,47 +48,48 @@
                 ) }}"
                 class="profile-image">
 
-            {% endif %}
+        {% endif %}
 
-            <form
-                action="/upload-profile-picture"
-                method="POST"
-                enctype="multipart/form-data">
+        <form
+            action="/upload-profile-picture"
+            method="POST"
+            enctype="multipart/form-data">
 
-                <input
-                    type="file"
-                    name="profile_picture"
-                    required>
+            <input
+                type="file"
+                name="profile_picture"
+                required>
 
-                <button type="submit">
-                    Upload Photo
-                </button>
+            <button type="submit">
+                Upload Photo
+            </button>
 
-            </form>
+        </form>
 
         <h1>👤 My Profile</h1>
+
         <p style="text-align:center;">
-    College Resource Exchange Member
-</p>
+            College Resource Exchange Member
+        </p>
 
         <p>
             <strong>Name:</strong>
-            {{ user[0] }}
+            {{ user.name }}
         </p>
 
         <p>
             <strong>Email:</strong>
-            {{ user[1] }}
+            {{ user.email }}
         </p>
 
         <p>
             <strong>Branch:</strong>
-            {{ user[2] }}
+            {{ user.branch }}
         </p>
 
         <p>
             <strong>Semester:</strong>
-            {{ user[3] }}
+            {{ user.semester }}
         </p>
 
         <p>
@@ -103,3 +105,4 @@
 
 </body>
 </html>
+```

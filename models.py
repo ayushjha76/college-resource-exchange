@@ -79,6 +79,11 @@ class Resource(db.Model):
         db.ForeignKey('users.id')
     )
 
+    user = db.relationship(
+        'User',
+        backref='resources'
+    )
+
     upload_date = db.Column(
         db.DateTime,
         server_default=db.func.now()

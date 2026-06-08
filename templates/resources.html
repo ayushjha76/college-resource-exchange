@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,8 +21,8 @@
             <a href="/dashboard">Dashboard</a>
             <a href="/upload">Upload</a>
             <a href="/resources">Resources</a>
-            <a href="/logout">Logout</a>
             <a href="/my-resources">My Resources</a>
+            <a href="/logout">Logout</a>
         </div>
 
     </nav>
@@ -37,7 +38,8 @@
             <input
                 type="text"
                 name="search"
-                placeholder="Search by Title, Subject or Type">
+                placeholder="Search by Title, Subject or Type"
+                value="{{ search if search else '' }}">
 
             <button type="submit">
                 Search
@@ -49,44 +51,74 @@
 
     <div class="resource-container">
 
-        {% for resource in resources %}
+        {% if resources %}
 
-        <div class="resource-card">
+            {% for resource in resources %}
 
-            <h3>{{ resource[1] }}</h3>
+            <div class="resource-card">
 
-            <p>
-                <strong>Subject:</strong>
-                {{ resource[2] }}
-            </p>
+                <h3>
+                    {{ resource.title }}
+                </h3>
 
-            <p>
-                <strong>Type:</strong>
-                {{ resource[3] }}
-            </p>
+                <p>
+                    <strong>Subject:</strong>
+                    {{ resource.subject }}
+                </p>
 
-            <p>
-                <strong>Semester:</strong>
-                {{ resource[4] }}
-            </p>
+                <p>
+                    <strong>Type:</strong>
+                    {{ resource.resource_type }}
+                </p>
 
-            <p>
-                <strong>Uploaded By:</strong>
+                <p>
+                    <strong>Semester:</strong>
+                    {{ resource.semester }}
+                </p>
 
-                    <a href="/user/{{ resource[6] }}">
-                        {{ resource[7] }}
+                <p>
+                    <strong>Description:</strong>
+                    {{ resource.description }}
+                </p>
+
+                <p>
+                    <strong>Uploaded By:</strong>
+
+                    <a href="/user/{{ resource.user.id }}">
+                        {{ resource.user.name }}
                     </a>
-            </p>
+                </p>
 
-            <a href="/download/{{ resource[5] }}">
-                Download
-            </a>
+                <div class="resource-actions">
 
-        </div>
+                    <a href="/download/{{ resource.file_name }}">
+                        Download
+                    </a>
 
-        {% endfor %}
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="resource-card">
+
+                <h3>
+                    No Resources Found
+                </h3>
+
+                <p>
+                    Try another search term.
+                </p>
+
+            </div>
+
+        {% endif %}
 
     </div>
 
 </body>
 </html>
+```
